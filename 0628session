@@ -1,0 +1,31 @@
+httpsession
+由JAVAWEB提供，用来会话跟踪的类，session是服务器端对象，保存在服务器端
+httpsession是servlet三大域对象之一（request/session/application(servletContest))，所以也有setAttribute(),getAttribute(),removeAttribute()。
+httpsession底层依赖Cookies,或是URL重写
+
+会话范围：某个用户从首次访问服务器开始，到该用户关闭浏览器结束；
+会话：一个用户对浏览器的多次连贯请求（中途未关闭浏览器），服务器为每个客户端船舰一个session对象。一个session很少出现并发请求
+
+servlet中得到session对象：HttpSession session = request.getSession();
+jsp中得到session对象：session是JSP内置对象不用船舰可以直接使用
+
+session域的相关方法：
+void setAttribute(String name,Object value);
+Object getAttribute(String name);
+void removeAttribute(String name);
+
+服务器不会马上创建session，在第一次获取时，才会创建 request.getSession();
+获取Cookie中的JSESSIONID:
+如果sessionId不存在，创建session,把session保存，并保存到Cookie中
+如果sessionId存在，通过sessionId查找session对象，未找到session,创建session，保存，并保存到Cookie中
+如果sessionId存在,通过sessionId查找session对象，找到-->不创建session
+如果创建了新的session浏览器会得到一个包含了sessionId的Cookie,这个Cookie生命为-1
+
+HttpSession的其他方法：
+void invalidata():让session失效  //request.getSession.invalidate()
+boolean isNew():查看session是否为新   //request.getSession.isNew()
+
+URL重写
+<body>
+  <a href="/xxx/xxx?JSESSIONID=<%=session.getId()%>">点击这里</a>
+  out.println(response.encodeURL("/xxx/servlet"));

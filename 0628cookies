@@ -1,0 +1,32 @@
+response.addHeader("Set-Cookie","aaa=AAA");
+HTTP协议规定:
+1个cookies最大4KB
+1个服务器最多向一个浏览器保存20个cookie
+1个浏览器最多可以保存300个cookie
+
+cookie的用途：
+服务器使用cookie来跟踪用户状态；
+保存购物车（购物车中的商品不能使用request保存，因为他是一个用户向服务器发送的多个请求信息）
+显示上次登录名
+
+JAVAWEB中使用cookie
+response.addCookie() //向浏览器保存Cookie
+response.getCookies() //获取浏览器归还的Cookie
+
+Cookie不能跨浏览器
+
+例：
+一个JSP保存Cookie //a.jsp`
+一个JSP获取浏览器归还的Cookie //b.jsp
+
+cookies不只有name和value两个属性
+maxAge()最大生命周期
+maxAge>0 浏览器会把cookie保存到客户机硬盘，时效为maxAge的值//cookie.setMaxAge(60) 保存60秒
+maxAge<0 只会在浏览器的内存中，关闭浏览器同时删除cookie
+maxAge=0 浏览器会马上删除这个cookie（删除浏览器原来保存的同名cookie)
+
+cookie的path（默认当前文件所在目录，能否带cookie决定于访问路径是否包含cookie所在路径
+cookie的path不是设置这个cookie在客户端保存的路径
+cookie的path由服务器创建cookie时设置
+当浏览器访问服务器某个路径是需要归还哪些cookie给服务器由cookie的path决定
+浏览器访问服务器的路径，如果包含某个cookie的路径，那么就会归还这个cookie

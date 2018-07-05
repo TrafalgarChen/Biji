@@ -1,0 +1,30 @@
+自定义标签
+步骤
+    标签处理类（标签也是一个对象，那么久需要先有类）
+    tld文件，他是一个XML
+    页面中使用<%@taglib%>来指定tld文件的位置
+
+标签处理类
+    simpleTag接口：
+        void doTag():每次执行标签时都会调用这个方法；
+        JspTag getParent():返回父标签（非生命周期方法）
+        void setParent(JspTag):设置父标签
+        void setJspBody(JspFragment):设置标签体
+        void setJspContext(JspContext):设置JSP上下文对象，它儿子是PageContext
+    其中doTag()会在其他三个方法之后被tomcat调用
+配置tld文件
+    tld文件一般都放到web-inf之下，这样保证客户端访问不到
+    <tag>
+            <name>myTag1</name>     //指定当前标签的名称
+            <tag-class>cn.t.tag.MyTag1</tag-class>  //指定当前标签的标签处理类
+            <body-content>empty</body-content>      //指定标签体的类型，我们这里使用的是空标签
+    </tag>
+页面中指定tld文件位置
+    <%@ taglib prefix="it" uri="/WEB-INF/tlds/MyTaga.tld" %>
+    导标签库，就是为页面指定tld文件的位置
+
+
+
+
+
+

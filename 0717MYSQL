@@ -1,0 +1,77 @@
+备份与恢复
+    数据库导出SQL脚本(备份数据库内容，并不是备份数据库数据)
+    mysqldump -u用户名 -密码 数据库名>路径/名称
+    mysqldump -uroot -p123 chendb>d:/a.sql
+        恢复数据库前需要在MYSQL中创建同名称的数据库
+        mysql -uroot -p 数据库名<路径/名称
+        mysql -uroot -p chendb<d:/a.sql
+
+        登陆MYSQL
+        source 脚本路径
+        source d:\a.sql
+
+约束
+    1.主键约束(唯一标识)
+    非空
+    唯一
+    被引用
+    
+    创建表时指定主键
+        CREATE TABLE EMP(
+            EMPNO INT PRIMARY KEY,
+            ENAME VARCHAR(50)
+        );或
+        CREATE TABLE 表名(
+            列名1 值类型，
+            列名2 值类型，
+            PRIMARY KEY(列名称)
+        );
+    已存在的表指定主键
+        ALTER TABLE 表名 ADD PRIMARY KEY(列名)
+    删除主键
+        ALTER TABLE 表名 DROP PRIMARY KEY;
+    
+    2.主键自增长
+        AUTO_INCREMENT
+
+    3.非空约束&&唯一约束
+        CREATE TABLE 表名(
+            列名1 值类型 UNIQUE,        //唯一约束
+            列名2 值类型 NUT NULL;      //非空约束
+            );
+
+    概念模型
+        关系模型
+            一对一
+            一对多
+            多对多
+        对象模型
+
+    
+
+    外键约束
+        外建必须是另一张表的主键（外键要引用主键）
+        外键可以重复
+        外键可以为空
+        一张表中可以有多个外键
+        CREATE TABLE DEPT(
+            DEPTNO INIT PRIMARY KEY AUTO_INCREMENT,
+            DNAME VARCHAR(20)
+        )
+        CREATE TABLE EMP(
+	        EMPNO INT PRIMARY KEY AUTO_INCREMENT,
+	        ENAME VARCHAR(20),
+	        DNO INT,
+	        CONSTRAINT FK_EMP_DEPT FOREIGN KEY(DNO) REFERENCES DEPT(DEPTNO)
+	);或
+        ALTER TABLE EMP
+        ADD CONSTRAINT FK_EMP_DEPT FOREIGN KEY(DNO) REFERENCES DEPT(DEPTNO)
+        
+tip 306
+
+
+
+    
+        
+
+

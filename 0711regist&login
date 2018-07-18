@@ -1,0 +1,93 @@
+功能
+    注册
+    登陆
+
+JSP:
+    login.jsp
+    regist.jsp
+    index.jsp
+
+Service:
+    loginServlet
+    registServlet
+
+Service:
+    UsrService     //与用户相关的业务
+
+Dao:
+    UsrDao      //与用户相关的数据类
+
+Domain:
+    Usr     //对应数据库，还要对应所有表单
+        UsrName
+        Passwd
+        verifyCode
+
+数据库设计
+    Usr.xml
+    <usr>
+        <usr usrname="xxx" passwd="xxx"/>
+    </usr>
+
+步骤：
+    a.创建空项目
+    b.导包
+        CommonUtils
+        Commons-beanutils.jar
+        Commons-logging.jar
+        dom4j
+    c.建包
+        cn.t.usr(项目名).(模块名/层级名称)
+        cn.t.usr.domain
+            Usr     //类
+        cn.t.usr.dao
+            UsrDao
+        cn.t.usr.service
+            UsrService
+        cn.t.usr.web.servlet
+            LoginServlet
+            RegistServlet
+    d.jsp
+        login.jsp
+        regist.jsp
+        index.jsp
+    e.创建usr.xml文件
+        添加根元素<usrs>
+        保证文件为utf-8编码
+
+注册：
+    regist.jsp
+        完成regist.jsp的基本功能
+    RegistServlet
+        封装表单数据，封装到Usr对象中.
+        调用service的regist()方法：
+            如果方法没有出问题，显示成功信息
+            如果方法抛出了异常，把错误信息保存到request域，转发到regist.jsp（显示错误信息）
+    UsrService      //regist()
+        没有返回值，但注册失败抛出一个自定义的异常,可以在异常中添加异常信息（自定义异常类）
+        校验用户名是否已被注册（通过用户名查询用户）,如果已被注册，抛出异常，显示异常信息为“用户名已注册”
+        添加用户
+    UsrDao      //通过业务分析，得到结果，需要提供两个方法
+        按用户名查询用户对象:findByUsrname(String usrname)
+        添加一个用户到数据库中:add(Usr usr)
+
+工作：
+    在service层添加一个UsrException
+    在dao添加:
+        usr findByUsrname(String usrname);
+        void add(Usr usr);
+    service
+        void regist() throw UsrException;
+    servlet
+        1.封装表单数据到Usr对象中
+        2.使用Usr调用service的regist()方法
+        3.
+            如果得到UsrException那么把异常信息保存到request域中，转发回regist.jsp
+            输出注册成功
+
+    
+
+
+
+
+

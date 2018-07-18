@@ -23,6 +23,37 @@
     <%@ taglib prefix="it" uri="/WEB-INF/tlds/MyTaga.tld" %>
     导标签库，就是为页面指定tld文件的位置
 
+进阶
+标签体内容
+    empty:无标签体
+    JSP:JSP2.0已经不支持这个类型了，表示标签体内容可以是：java脚本，可以是标签，可以是EL表达式
+    scriptless:只能使用EL表达式，也可以是其他的标签
+    tagdependent:标签体内容不会被执行，而是直接赋值标签处理类
+
+不再执行标签下面内容的标签
+    在标签处理类中的doTag()中使用SkipPageException来结束
+    Tomcat会调用标签处理类的doTag()方法，然后Tomcat会得到SkipPageException,他会跳过本页面的其他内容
+    
+标签属性
+    步骤：
+        1.给标签处理类添加属性；
+            为标签处理类添加属性，属性至少由一个set方法，这个set方法会在doTag()之前被tomcat执行，所以在doTag()之前就可以使用属性了；
+
+        2.在tld文件中对属性就行配置；
+            <tag>
+            <name>myTag5</name>
+            <tag-class>cn.t.tag.MyTag5</tag-class>
+            <body-content>scriptless</body-content>
+            <attribute>
+                <name>test</name>       //指定属性名
+                <required>true</required>   //指定属性是否是必须的
+                <rtexprvalue>true</rtexprvalue>     //指定属性是否可以使用EL表达式
+            </attribute>
+            </tag>
+    
+
+    
+
 
 
 

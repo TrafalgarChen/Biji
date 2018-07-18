@@ -1,0 +1,106 @@
+多表查询
+1分类
+    合并结果集
+    连接查询
+    子查询
+
+合并结果集
+    要求被合并的结果集中，列的类型和列数相同
+    UNION,去除重复行
+
+    CREATE TABLE AB(
+    A INT,
+    B VARCHAR(20)
+    );
+    INSERT INTO AB VALUES(1,'1');
+    INSERT INTO AB VALUES(2,'2');
+    INSERT INTO AB VALUES(3,'3');
+
+    CREATE TABLE CD(
+        C INT,
+        D VARCHAR(20)
+        );
+    INSERT INTO CD VALUES(3,'3');
+    INSERT INTO CD VALUES(4,'4');
+    INSERT INTO CD VALUES(5,'5');
+    
+    SELECT * FROM AB
+    UNION ALL       //合并结果集，不去除完全相同的行，不加ALL则去除完全相同的结果
+    SELECT * FROM CD;
+    
+连接查询
+    分类
+        内连接
+        外连接
+            左外连接
+            右外连接
+            全外连接（MYSQL不支持）
+        自然连接（属于一种简化方式）
+    
+    内链接      //多表查询首先去除笛卡儿积
+        方言:SELECT * FROM 表名1，表名2；   //笛卡尔积
+            CREATE TABLE FK1(
+            F1ID INT PRIMARY KEY AUTO_INCREMENT,
+            F1NAME VARCHAR(10)
+            );
+
+            CREATE TABLE FK2(
+            F2ID INT PRIMARY KEY AUTO_INCREMENT,
+            F2NAME VARCHAR(10),
+            FKID INT,
+            CONSTRAINT FK_FK1_FK2 FOREIGN KEY (FKID) REFERENCES FK1(F1ID)
+            );
+            INSERT INTO FK1 VALUES(NULL,'F11');
+            INSERT INTO FK1 VALUES(NULL,'F12');
+            INSERT INTO FK1 VALUES(NULL,'F13');
+            INSERT INTO FK1 VALUES(NULL,'F14');
+
+            INSERT INTO FK2 VALUES(NULL,'F21',1);
+            INSERT INTO FK2 VALUES(NULL,'F22',2);
+            INSERT INTO FK2 VALUES(NULL,'F23',3);
+            
+            SELECT *
+            FROM FK1 1,FK2 2        //分别起别名为1、2
+            WHERE FK1.F1ID=FK2.FKID;
+        
+        标准:SELECT * FROM 表名1 别名1 INNER JOIN 表名2 别名2 ON 别名1.XXX=别名2.XXX；
+            SELECT *
+            FROM FK1 1 INNER JOIN FK2 2        //分别起别名为1、2
+            ON FK1.F1ID=FK2.FKID;
+
+        自然:SELECT * FROM 表明1 别名1 NATURAL JOIN 表明2 别名2；
+    
+    外链接      //左外链接有一主一次，左表为主，右表为次，那么左表中所有的记录无论是否满足条件都会打印出来，当不满足条件时右表使用NULL来补位(右外同理)
+        SELECT *        //左外
+        FROM FK1 1 LEFT OUTER JOIN FK2 2        //分别起别名为1、2
+        ON FK1.F1ID=FK2.FKID;
+
+        SELECT *        //右外
+        FROM FK1 1 RIGHT OUTER JOIN FK2 2        
+        ON FK1.F1ID=FK2.FKID;
+
+        SELECT *        //全外（MYSQL不支持）
+        FROM FK1 1 FULL OUTER JOIN FK2 2        
+        ON FK1.F1ID=FK2.FKID;
+
+        SELECT *        //MYSQL版全外
+        FROM FK1 1 LEFT OUTER JOIN FK2 2        
+        ON FK1.F1ID=FK2.FKID
+        UNION       //去除重复行
+        SELECT *        
+        FROM FK1 1 RIGHT OUTER JOIN FK2 2        
+        ON FK1.F1ID=FK2.FKID;
+
+子查询
+    SELECT * FROM 表名1 WHERE A=(SELECT MAX(NUM) FROM 表名2)；
+
+    SELECT(不建议出现子查询)
+    FROM 表(可以出现子查询)
+    WHERE 条件(可以出现子查询)
+
+    查询结果集可以使用关键字ALL、ANY、IN
+    SELECT * FROM 表名1 WHERE A>ALL (SELECT 列名1 FROM 表名1 WHERE 条件//查询结果为多个)；
+    SELECT * FROM 表名1 WHERE A>ANY (SELECT 列名1 FROM 表名1 WHERE 条件 //查询结果为多个)；
+    SELECT * FROM 表名1 WHERE (A,B,C,) IN (SELECT 列名1 FROM 表名1 WHERE 条件   //查询结果为集合)；
+
+
